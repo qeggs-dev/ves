@@ -222,7 +222,7 @@ class BaseVES(ABC):
         if result is not None:
             return result.returncode
     
-    def activate(self, env_name: str) -> int | None:
+    def shell(self, env_name: str) -> int | None:
         """
         Activate the virtual environment.
 
