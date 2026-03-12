@@ -181,3 +181,7 @@ print "安装完成"
 ## 许可证
 
 [MIT License](LICENSE)
+
+## 一些彩蛋
+
+你知道 `VES` 长得很像 `YES` 吗？
