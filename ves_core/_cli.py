@@ -34,7 +34,7 @@ class VESCLI:
             cmds = {
                 "create": self._ves.create,
                 "ifr": self._ves.install_for_requirements,
-                "activate": self._ves.activate,
+                "shell": self._ves.shell,
                 "repl": self._ves.repl,
                 "install": self._install_cli,
                 "uninstall": self._uninstall_cli,
@@ -397,7 +397,7 @@ class VESCLI:
         """
         if self._ves.initable(venv_name):
             self._ves.init_venv(venv_name)
-        self._ves.activate(venv_name)
+        self._ves.shell(venv_name)
     
     def _cmdlist_cli(self, json_format: bool = False):
         """
