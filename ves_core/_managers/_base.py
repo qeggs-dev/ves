@@ -126,7 +126,7 @@ class BaseVES(ABC):
                 "python",
                 "-m",
                 "venv",
-                self._bin_dir_path(env_name),
+                str(self._bin_dir_path(env_name)),
                 "--prompt",
                 env_name
             ],
