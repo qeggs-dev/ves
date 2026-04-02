@@ -50,7 +50,6 @@ class BaseVES(ABC):
         """
         path = self._venv_path(env_name)
         shutil.rmtree(path)
-        os.rmdir(path)
     
     def get_envs(self):
         """
