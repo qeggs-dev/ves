@@ -48,7 +48,9 @@ class BaseVES(ABC):
 
         :param env_name: The name of the virtual environment to remove.
         """
-        shutil.rmtree(self._venv_path(env_name))
+        path = self._venv_path(env_name)
+        shutil.rmtree(path)
+        os.rmdir(path)
     
     def get_envs(self):
         """
@@ -126,7 +128,7 @@ class BaseVES(ABC):
                 "python",
                 "-m",
                 "venv",
-                str(self._bin_dir_path(env_name)),
+                str(self._venv_path(env_name)),
                 "--prompt",
                 env_name
             ],
@@ -165,9 +167,7 @@ class BaseVES(ABC):
         """
         result = self._run(
             [
-                str(self._bin_dir_path(env_name) / self._python_executable_name),
-                "-m",
-                "pip",
+                str(self._bin_dir_path(env_name) / self._pip_executable_name),
                 "install" if not uninstall else "uninstall",
                 package,
             ]
@@ -186,9 +186,7 @@ class BaseVES(ABC):
         """
         result = self._run(
             [
-                str(self._bin_dir_path(env_name) / self._python_executable_name),
-                "-m",
-                "pip",
+                str(self._bin_dir_path(env_name) / self._pip_executable_name),
                 "freeze",
             ],
             text = True,
@@ -211,9 +209,7 @@ class BaseVES(ABC):
         """
         result = self._run(
             [
-                str(self._bin_dir_path(env_name) / self._python_executable_name),
-                "-m",
-                "pip",
+                str(self._bin_dir_path(env_name) / self._pip_executable_name),
                 "install",
                 "-r",
                 requirements_file
