@@ -34,6 +34,12 @@ class BaseVES(ABC):
         The base directory for the virtual environments.
         """
         return self._base_dir
+
+    @base_dir.setter
+    def base_dir(self, base_dir: Path):
+        if not isinstance(base_dir, Path):
+            raise TypeError("base_dir must be a Path")
+        self._base_dir = base_dir
     
     def _venv_path(self, env_name: str) -> Path:
         return self.base_dir / env_name / self._venv_dir

@@ -33,6 +33,7 @@ class VESCLI:
         self._cmd_caller = Command_Caller(
             cmds = {
                 "create": self._ves.create,
+                "chbase": self._change_base_dir,
                 "ifr": self._ves.install_for_requirements,
                 "shell": self._ves.shell,
                 "repl": self._ves.repl,
@@ -66,6 +67,14 @@ class VESCLI:
                 "exit": self._exit_this_cli,
             }
         )
+
+    def _change_base_dir(self, base_dir: str):
+        """
+        Change the base directory
+
+        :param base_dir: The new base directory
+        """
+        self._ves.base_dir = Path(base_dir)
     
     def _set_var_from_ret(self, key: str):
         """
