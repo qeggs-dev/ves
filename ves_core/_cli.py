@@ -34,6 +34,7 @@ class VESCLI:
             cmds = {
                 "create": self._ves.create,
                 "chbase": self._change_base_dir,
+                "main": self.main,
                 "ifr": self._ves.install_for_requirements,
                 "shell": self._ves.shell,
                 "repl": self._ves.repl,
@@ -261,6 +262,11 @@ class VESCLI:
         return cmds_copy
 
     def main(self, commands: Iterable[list[str]] | None = None):
+        """
+        Run the VES
+
+        :param commands: The commands to run
+        """
         try:
             if commands is None:
                 try:
