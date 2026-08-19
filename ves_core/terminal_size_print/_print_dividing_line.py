@@ -1,9 +1,16 @@
 import os
 
-def print_dividing_line(char: str = "="):
-    if len(char) >= 1:
-        char = char[0]
+def dividing_line(char: str = "="):
+    columns = os.get_terminal_size().columns
+    if len(char) == 1:
+        text = char * columns
+    elif len(char) > 1:
+        times = columns // len(char)
+        text = char * times + char[:columns % len(char)]
     else:
-        raise ValueError("Char must be at least 1 character long")
-    
-    print(char * os.get_terminal_size().columns)
+        raise ValueError("No character specified")
+
+    return text
+
+def print_dividing_line(char: str = "="):
+    print(dividing_line(char))
