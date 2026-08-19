@@ -11,7 +11,7 @@ from typing import (
 )
 from pathlib import Path
 from datetime import datetime
-from ._managers._base import BaseVES
+from ._managers.base import BaseVES
 from ._format_time_duration import format_time_duration
 from .terminal_size_print import (
     print_dividing_line,
@@ -34,7 +34,7 @@ class VESCLI:
             cmds = {
                 "create": self._ves.create,
                 "chbase": self._change_base_dir,
-                "main": self.main,
+                "recursive": self._recursive,
                 "ifr": self._ves.install_for_requirements,
                 "shell": self._ves.shell,
                 "repl": self._ves.repl,
@@ -261,6 +261,9 @@ class VESCLI:
                 cmds_copy.append(command)
         return cmds_copy
 
+    def _recursive(self, *commands: str):
+        return self.main([shlex.split(command) for command in commands])
+
     def main(self, commands: Iterable[list[str]] | None = None):
         """
         Run the VES
@@ -281,21 +284,24 @@ class VESCLI:
             else:
                 commands = list(commands)
                 run_point: int = 0
-                while True:
-                    try:
-                        cmd = commands[run_point]
-                        cmd[0] = cmd[0].lower()
-                        self.match_cmd(cmd)
-                        run_point += 1
-                    except VES_CLI_JUMP as e:
-                        raw_point = run_point
-                        if e.absolute:
-                            run_point = e.line
-                        else:
-                            run_point += e.line
-                        if run_point < 0 or run_point >= len(commands):
-                            print("Jump out of range")
-                            run_point = raw_point
+                if not commands:
+                    self.cli()
+                else:
+                    while True:
+                        try:
+                            cmd = commands[run_point]
+                            cmd[0] = cmd[0].lower()
+                            self.match_cmd(cmd)
+                            run_point += 1
+                        except VES_CLI_JUMP as e:
+                            raw_point = run_point
+                            if e.absolute:
+                                run_point = e.line
+                            else:
+                                run_point += e.line
+                            if run_point < 0 or run_point >= len(commands):
+                                print("Jump out of range")
+                                run_point = raw_point
         except VES_CLI_EXIT as e:
             return e.code
         except Exception as e:
@@ -391,10 +397,15 @@ class VESCLI:
         :param dst_venv_name: Destination environment name
         """
         freeze = self._ves.freeze(src_venv_name)
-        if self._ves.exists(dst_venv_name):
-            self._ves.remove(dst_venv_name)
-        self._ves.create(dst_venv_name)
-        self._ves.install(dst_venv_name, freeze.replace("\n", " "))
+        if not freeze:
+            print_dividing_line()
+            print(f"VES Sub-Examples Error: Source environment '{src_venv_name}' not found")
+            raise
+        else:
+            if self._ves.exists(dst_venv_name):
+                self._ves.remove(dst_venv_name)
+            self._ves.create(dst_venv_name)
+            self._ves.install(dst_venv_name, freeze.replace("\n", " "))
     
     def _list_cli(self):
         """
