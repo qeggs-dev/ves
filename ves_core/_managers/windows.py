@@ -1,6 +1,6 @@
 import subprocess
 from pathlib import Path
-from ._base import BaseVES as VESBase
+from .base import BaseVES as VESBase
 
 class VES_Windows(VESBase):
     def __init__(

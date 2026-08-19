@@ -1,8 +1,7 @@
-from ._base import BaseVES
-from ._windows import VES_Windows
-from ._linux import VES_Linux
-from ._darwin import VES_Darwin
-
+from .base import BaseVES
+from .windows import VES_Windows
+from .linux import VES_Linux
+from .darwin import VES_Darwin
 __all__ = [
     "BaseVES",
     "VES_Windows",
